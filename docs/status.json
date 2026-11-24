@@ -1,0 +1,104 @@
+{
+  "project": "Paradox AI",
+  "formerly": "PhoneAgent",
+  "version": "1.0.0-release",
+  "package": "com.phoneagent.ai",
+  "status": "ACCEPTED_RELEASE_CANDIDATE",
+  "timestamp": "2026-11-23T21:38:00+05:30",
+  "appIcon": {
+    "source": "Desktop/1-paradox-ai-icon.png",
+    "artwork": "Official 512x512 Sherlock Detective Robot",
+    "format": "512px cropped artwork (zero external caption or watermark)",
+    "adaptiveIcon": {
+      "foreground": "mipmap-*/ic_launcher_foreground.png (safe padded inner 72%)",
+      "background": "#0C0D11",
+      "anyDpiXml": "mipmap-anydpi-v26/ic_launcher.xml, ic_launcher_round.xml"
+    },
+    "legacyMipmaps": [
+      "mipmap-mdpi (48x48)",
+      "mipmap-hdpi (72x72)",
+      "mipmap-xhdpi (96x96)",
+      "mipmap-xxhdpi (144x144)",
+      "mipmap-xxxhdpi (192x192)"
+    ],
+    "inAppGreetingLogo": "drawable-nodpi/ic_paradox_logo.png"
+  },
+  "acceptance": {
+    "totalTests": 52,
+    "passedTests": 52,
+    "failedTests": 0,
+    "successRate": "100%",
+    "testResultsFile": "test-results.txt",
+    "qaReportFile": "QA-report.txt",
+    "qaFile": "qa.html",
+    "contactSheetFile": "contact_sheet.html",
+    "buildNotesFile": "build-notes.md",
+    "progressFile": "progress.md",
+    "qaReviewZip": "QA-review.zip",
+    "hermesParityClaimed": false,
+    "acrobatOrOfficeParityClaimed": false,
+    "generalInjectionImmunityClaimed": false,
+    "physicalHardwareParityClaimed": false
+  },
+  "primaryPhysicalQA": {
+    "device": "Samsung Galaxy A13 (SM-A135F)",
+    "serial": "RZ8T415J2AB",
+    "androidVersion": "Android 14 (API 34)",
+    "testSuite": "37 instrumented tests passed (100%)",
+    "xmlReport": "TEST-SM-A135F - 14-_app-.xml",
+    "timestamp": "2026-11-23T16:07:15Z",
+    "installed": true
+  },
+  "emulatorFallback": {
+    "device": "emulator-5554",
+    "avd": "Recall_R24c_Fresh_20261117_1509",
+    "androidVersion": "API 37.0",
+    "testSuite": "Verified active fallback",
+    "installed": true,
+    "running": true
+  },
+  "securityAudits": {
+    "keystoreSecurity": {
+      "encryption": "AES-256 GCM + SIV (EncryptedSharedPreferences)",
+      "plaintextFallback": false,
+      "failClosedPolicy": true,
+      "legacyFallbackPurged": true
+    },
+    "browserSelectorSecurity": {
+      "quotedSelectors": "JSONObject.quote",
+      "rawInterpolationAvoided": true,
+      "syntaxErrorCatching": true
+    },
+    "browserConfirmationEnforcement": {
+      "mandatoryInAppDialog": true,
+      "defaultDeny": true,
+      "fakeAutoAllowCallbackRemoved": true,
+      "detailsShown": ["Site", "Action", "Target", "Proposed Value"],
+      "failClosedOn": ["Denial", "Dismissal", "Navigation", "Timeout"],
+      "sensitiveFieldsBlocked": true,
+      "sensitiveFieldTypes": ["Password", "OTP / 2FA", "Credit Card / Payment", "Payment Submission"],
+      "allowOfferedForSensitive": false,
+      "atomicPreExecutionRecheck": true,
+      "domMutationWhilePendingBlocked": true,
+      "domObservationRedactsOtpAndPayment": true
+    },
+    "openRouterEnforcement": {
+      "timing": "Immediately before every inference request",
+      "allowedModels": "openrouter/free or models with :free suffix",
+      "rejectPaidModelsWithZeroRequests": true
+    }
+  },
+  "build": {
+    "targetSdk": 35,
+    "minSdk": 26,
+    "gradle": "9.6.0",
+    "kotlin": "2.0.21",
+    "composeBom": "2024.11.00",
+    "apkPath": "app/build/outputs/apk/debug/app-debug.apk",
+    "apkSizeBytes": 18519290,
+    "apkSizeFormatted": "18.5 MB",
+    "sha256": "A7C71248DB6A908344E8C38E1010DBB3850A8B5B432FB21BFDCDEA89C069F9C8",
+    "catboxDownloadUrl": "https://files.catbox.moe/grn7vo.apk",
+    "buildResult": "SUCCESS"
+  }
+}

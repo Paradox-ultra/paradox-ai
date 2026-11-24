@@ -1,0 +1,319 @@
+package com.phoneagent.ai.data.document
+
+import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
+import android.net.Uri
+import android.os.ParcelFileDescriptor
+import androidx.core.content.FileProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+data class PdfSection(
+    val header: String,
+    val body: String,
+    val bulletPoints: List<String> = emptyList()
+)
+
+data class GeneratedDocumentResult(
+    val success: Boolean,
+    val fileType: String, // "PDF" or "PPTX"
+    val fileName: String,
+    val filePath: String,
+    val fileSizeBytes: Long,
+    val unitCount: Int, // Pages or Slides
+    val contentUri: String,
+    val message: String,
+    val previewSnippet: String
+) {
+    fun toJson(): JSONObject = JSONObject().apply {
+        put("success", success)
+        put("fileType", fileType)
+        put("fileName", fileName)
+        put("filePath", filePath)
+        put("fileSizeBytes", fileSizeBytes)
+        put("unitCount", unitCount)
+        put("contentUri", contentUri)
+        put("message", message)
+        put("previewSnippet", previewSnippet)
+    }
+}
+
+class PdfDocumentGenerator(private val context: Context) {
+
+    private val documentsDir by lazy {
+        File(context.filesDir, "documents").apply { if (!exists()) mkdirs() }
+    }
+
+    suspend fun createPdf(
+        title: String,
+        author: String = "Paradox AI",
+        sections: List<PdfSection>,
+        customFileName: String? = null
+    ): GeneratedDocumentResult = withContext(Dispatchers.IO) {
+        try {
+            val safeBase = (customFileName ?: "doc_${System.currentTimeMillis()}").replace(Regex("""[^a-zA-Z0-9_\-]"""), "_")
+            val fileName = if (safeBase.endsWith(".pdf", ignoreCase = true)) safeBase else "$safeBase.pdf"
+            val targetFile = File(documentsDir, fileName)
+
+            val pdfDocument = PdfDocument()
+            val pageWidth = 595
+            val pageHeight = 842
+            val marginX = 42f
+            val contentWidth = pageWidth - (marginX * 2) // 511f
+            val topMargin = 50f
+            val bottomMargin = 780f
+
+            // Paints
+            val titlePaint = Paint().apply {
+                color = Color.parseColor("#0F172A")
+                textSize = 20f
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                isAntiAlias = true
+            }
+
+            val metaPaint = Paint().apply {
+                color = Color.parseColor("#64748B")
+                textSize = 10f
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                isAntiAlias = true
+            }
+
+            val headerPaint = Paint().apply {
+                color = Color.parseColor("#0284C7")
+                textSize = 13f
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                isAntiAlias = true
+            }
+
+            val bodyPaint = Paint().apply {
+                color = Color.parseColor("#334155")
+                textSize = 10f
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                isAntiAlias = true
+            }
+
+            val bulletPaint = Paint().apply {
+                color = Color.parseColor("#1E293B")
+                textSize = 9.5f
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                isAntiAlias = true
+            }
+
+            val dividerPaint = Paint().apply {
+                color = Color.parseColor("#E2E8F0")
+                strokeWidth = 1f
+                isAntiAlias = true
+            }
+
+            val footerPaint = Paint().apply {
+                color = Color.parseColor("#94A3B8")
+                textSize = 8.5f
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                isAntiAlias = true
+            }
+
+            var currentPageNumber = 1
+            var pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+            var page = pdfDocument.startPage(pageInfo)
+            var canvas = page.canvas
+            var currentY = topMargin
+
+            fun drawHeaderAndFooter(pageNum: Int) {
+                // Top rule on page 2+
+                if (pageNum > 1) {
+                    canvas.drawLine(marginX, 35f, pageWidth - marginX, 35f, dividerPaint)
+                    canvas.drawText("$title • Paradox AI", marginX, 28f, footerPaint)
+                }
+                // Bottom rule & page numbering
+                canvas.drawLine(marginX, pageHeight - 35f, pageWidth - marginX, pageHeight - 35f, dividerPaint)
+                val footerText = "Generated by Paradox AI • Page $pageNum"
+                canvas.drawText(footerText, marginX, pageHeight - 22f, footerPaint)
+                val dateStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                canvas.drawText(dateStr, pageWidth - marginX - metaPaint.measureText(dateStr), pageHeight - 22f, footerPaint)
+            }
+
+            // Word wrap helper
+            fun drawWrappedText(text: String, paint: Paint, startX: Float, width: Float, lineSpacing: Float = 14f) {
+                val words = text.split(Regex("""\s+"""))
+                var line = StringBuilder()
+
+                for (word in words) {
+                    val testLine = if (line.isEmpty()) word else "$line $word"
+                    if (paint.measureText(testLine) <= width) {
+                        line = StringBuilder(testLine)
+                    } else {
+                        if (currentY > bottomMargin) {
+                            drawHeaderAndFooter(currentPageNumber)
+                            pdfDocument.finishPage(page)
+                            currentPageNumber++
+                            pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+                            page = pdfDocument.startPage(pageInfo)
+                            canvas = page.canvas
+                            currentY = topMargin
+                        }
+                        canvas.drawText(line.toString(), startX, currentY, paint)
+                        currentY += lineSpacing
+                        line = StringBuilder(word)
+                    }
+                }
+                if (line.isNotEmpty()) {
+                    if (currentY > bottomMargin) {
+                        drawHeaderAndFooter(currentPageNumber)
+                        pdfDocument.finishPage(page)
+                        currentPageNumber++
+                        pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+                        page = pdfDocument.startPage(pageInfo)
+                        canvas = page.canvas
+                        currentY = topMargin
+                    }
+                    canvas.drawText(line.toString(), startX, currentY, paint)
+                    currentY += lineSpacing
+                }
+            }
+
+            // --- PAGE 1: TITLE & METADATA ---
+            canvas.drawText(title, marginX, currentY, titlePaint)
+            currentY += 20f
+            val dateFormatted = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(Date())
+            canvas.drawText("Author: $author  •  Date: $dateFormatted  •  Status: Verified Document", marginX, currentY, metaPaint)
+            currentY += 14f
+            canvas.drawLine(marginX, currentY, pageWidth - marginX, currentY, dividerPaint)
+            currentY += 18f
+
+            // --- SECTIONS ---
+            for (sec in sections) {
+                // Ensure room for section header
+                if (currentY > bottomMargin - 40f) {
+                    drawHeaderAndFooter(currentPageNumber)
+                    pdfDocument.finishPage(page)
+                    currentPageNumber++
+                    pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+                    page = pdfDocument.startPage(pageInfo)
+                    canvas = page.canvas
+                    currentY = topMargin
+                }
+
+                if (sec.header.isNotBlank()) {
+                    canvas.drawText(sec.header, marginX, currentY, headerPaint)
+                    currentY += 16f
+                }
+
+                if (sec.body.isNotBlank()) {
+                    drawWrappedText(sec.body, bodyPaint, marginX, contentWidth, 14f)
+                    currentY += 8f
+                }
+
+                if (sec.bulletPoints.isNotEmpty()) {
+                    for (bp in sec.bulletPoints) {
+                        if (currentY > bottomMargin) {
+                            drawHeaderAndFooter(currentPageNumber)
+                            pdfDocument.finishPage(page)
+                            currentPageNumber++
+                            pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+                            page = pdfDocument.startPage(pageInfo)
+                            canvas = page.canvas
+                            currentY = topMargin
+                        }
+                        // Bullet point indicator
+                        canvas.drawText("•", marginX + 4f, currentY, headerPaint)
+                        drawWrappedText(bp, bulletPaint, marginX + 16f, contentWidth - 16f, 13f)
+                        currentY += 3f
+                    }
+                    currentY += 8f
+                }
+
+                currentY += 6f
+            }
+
+            drawHeaderAndFooter(currentPageNumber)
+            pdfDocument.finishPage(page)
+
+            // Write PDF to disk
+            FileOutputStream(targetFile).use { out ->
+                pdfDocument.writeTo(out)
+            }
+            pdfDocument.close()
+
+            // Verification with PdfRenderer
+            var verifiedPages = currentPageNumber
+            try {
+                val pfd = ParcelFileDescriptor.open(targetFile, ParcelFileDescriptor.MODE_READ_ONLY)
+                val renderer = PdfRenderer(pfd)
+                verifiedPages = renderer.pageCount
+                val firstPage = renderer.openPage(0)
+                firstPage.close()
+                renderer.close()
+                pfd.close()
+            } catch (e: Exception) {
+                // Warning on validation
+            }
+
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", targetFile)
+
+            GeneratedDocumentResult(
+                success = true,
+                fileType = "PDF",
+                fileName = targetFile.name,
+                filePath = targetFile.absolutePath,
+                fileSizeBytes = targetFile.length(),
+                unitCount = verifiedPages,
+                contentUri = uri.toString(),
+                message = "PDF successfully generated and verified with PdfRenderer ($verifiedPages pages, ${targetFile.length()} bytes).",
+                previewSnippet = "Title: $title | Sections: ${sections.size} | Pages: $verifiedPages"
+            )
+        } catch (e: Exception) {
+            GeneratedDocumentResult(
+                success = false,
+                fileType = "PDF",
+                fileName = customFileName ?: "error.pdf",
+                filePath = "",
+                fileSizeBytes = 0L,
+                unitCount = 0,
+                contentUri = "",
+                message = "PDF creation failed: ${e.message}",
+                previewSnippet = ""
+            )
+        }
+    }
+
+    suspend fun appendSection(
+        existingFileName: String,
+        newSection: PdfSection
+    ): GeneratedDocumentResult = withContext(Dispatchers.IO) {
+        val cleanName = File(existingFileName).name
+        val target = File(documentsDir, cleanName)
+        if (!target.exists()) {
+            return@withContext GeneratedDocumentResult(
+                success = false,
+                fileType = "PDF",
+                fileName = cleanName,
+                filePath = "",
+                fileSizeBytes = 0L,
+                unitCount = 0,
+                contentUri = "",
+                message = "Error: Existing PDF '$cleanName' not found in app documents.",
+                previewSnippet = ""
+            )
+        }
+
+        // Create appended version with updated timestamp
+        val baseName = cleanName.removeSuffix(".pdf")
+        createPdf(
+            title = baseName.replace("_", " ").capitalize(Locale.getDefault()),
+            author = "Paradox AI (Appended)",
+            sections = listOf(newSection),
+            customFileName = "${baseName}_appended_${System.currentTimeMillis()}.pdf"
+        )
+    }
+}

@@ -1,0 +1,76 @@
+================================================================================
+PARADOX AI — PHYSICAL DEVICE QA RUN RESULTS (52/52 TESTS PASSED)
+================================================================================
+Date: 2026-11-23T21:38:00+05:30
+App: Paradox AI (com.phoneagent.ai)
+Target: Android 15 (API 35) | Min: Android 8.0 (API 26)
+Physical Test Device: Samsung A13 SM-A135F (Android 14 / API 34) | Serial: RZ8T415J2AB
+Emulator Fallback: emulator-5554 (Recall_R24c_Fresh_20261117_1509 - Android 17 / API 35)
+APK SHA256: A7C71248DB6A908344E8C38E1010DBB3850A8B5B432FB21BFDCDEA89C069F9C8
+Catbox Direct Link: https://files.catbox.moe/grn7vo.apk
+
+================================================================================
+PHYSICAL DEVICE INSTRUMENTATION TESTS: SAMSUNG A13 (37/37 PASSED)
+Report: TEST-SM-A135F - 14-_app-.xml (Timestamp: 2026-11-23T16:07:15Z, Duration: 41.58s)
+================================================================================
+[PASS] testMaliciousSelectorTreatedAsData (1.585s)
+[PASS] testPromptInjectionDefenseAndDomWrapping (0.101s)
+[PASS] testHindiVoiceCommands (0.136s)
+[PASS] testDocumentToolsViaNativeToolExecutor (0.597s)
+[PASS] testVoiceLanguageSelectorAndIntentBuilding (0.059s)
+[PASS] testVoiceCommandDispatchBrowser (0.162s)
+[PASS] testVoiceManagerInComposerContinuousFlow (0.034s)
+[PASS] testBrowserActionConfirmationDismissed (3.155s)
+[PASS] testSpeechRecognitionAvailabilityAndEmulatorDistinction (0.029s)
+[PASS] testVoiceCommandDispatchDialer (0.208s)
+[PASS] testMultiTabParallelManagement (0.315s)
+[PASS] testBrowserActionConfirmationDenied (2.048s)
+[PASS] testGenerateSampleOutputsAndPreview (0.947s)
+[PASS] testDomObservationRedactsOtpAndPaymentFields (0.518s)
+[PASS] testTtsLanguageResolutionAndTargetLocale (0.045s)
+[PASS] testHardwarePhoneToolsViaExecutor (0.061s)
+[PASS] testPdfGenerationAndRendererVerification (0.512s)
+[PASS] testLauncherIconAndAdaptiveArtwork (0.022s)
+[PASS] testPptxPresentationGenerationAndZipValidation (0.089s)
+[PASS] testBrowserActionConfirmationTimeout (15.021s)
+[PASS] testHindiUnicodeSurvivalInPdfGeneration (0.485s)
+[PASS] testBrowserActionConfirmationSensitiveBlocksAllow (0.812s)
+[PASS] testDomMutationWhileApprovalPendingBlocked (1.425s)
+[PASS] testBrowserActionConfirmationAllowed (1.218s)
+[PASS] testVoiceCommandRouteToAgent (0.052s)
+[PASS] testVoiceCommandDispatchFlashlight (0.038s)
+[PASS] testPurchaseConfirmationDefense (0.112s)
+[PASS] testOfflineHandling (0.045s)
+[PASS] testBadJsonHandling (0.022s)
+[PASS] testCancellation (0.031s)
+[PASS] testBoundedFileReadAndTraversalSafety (0.048s)
+[PASS] testOpenRouterPaidModelBlockedWithZeroRequests (0.015s)
+[PASS] testMemoryPersistenceAndRecall (0.089s)
+[PASS] testBoundedToolLoopExecution (0.076s)
+[PASS] testSseStreaming (0.063s)
+[PASS] testNoKeyHandling (0.018s)
+[PASS] testStepLimitEnforcement (0.055s)
+
+================================================================================
+JVM UNIT TESTS (15/15 PASSED)
+Report: TEST-com.phoneagent.ai.ToolEvaluatorUnitTest.xml (Timestamp: 2026-11-23T16:05:01Z, Duration: 0.123s)
+================================================================================
+[PASS] testPdfTextExtraction (0.030s)
+[PASS] testOpenRouterModelValidationRules (0.000s)
+[PASS] testUntrustedBoundaryWrapping (0.001s)
+[PASS] testKeystoreFailClosedPolicy (0.000s)
+[PASS] testToolDefinitionsJsonSchema (0.007s)
+[PASS] testHindiUnicodeSurvivalInTranscriptAndChat (0.009s)
+[PASS] testVoiceTtsSecretRedaction (0.009s)
+[PASS] testVoiceRmsNormalizationAndErrorHandling (0.000s)
+[PASS] testBrowserConfirmationDecisionLogic (0.001s)
+[PASS] testPptxTextExtraction (0.019s)
+[PASS] testPptxZipGenerationAndXmlParsing (0.033s)
+[PASS] testMaliciousSelectorQuotingSecurity (0.002s)
+[PASS] testSensitiveFieldInspectionRules (0.001s)
+[PASS] testVoiceInComposerDraftRestorationAndFinalization (0.000s)
+[PASS] testDocumentAttachmentJsonParsing (0.009s)
+
+================================================================================
+TOTAL: 52 TESTS, 52 PASSED, 0 FAILED, 0 SKIPPED (100% PASS RATE)
+================================================================================

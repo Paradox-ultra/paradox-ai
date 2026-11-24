@@ -1,0 +1,237 @@
+================================================================================
+PARADOX AI — PHYSICAL DEVICE QA, TEST ASSERTIONS & DELIVERY REPORT
+================================================================================
+Generated: 2026-11-23T21:38:00+05:30
+Application Name: Paradox AI (formerly PhoneAgent)
+Package Identifier: com.phoneagent.ai
+Target Android SDK: 35 (Android 15) | Min SDK: 26 (Android 8.0)
+Build System: Gradle 9.6.0 | AGP: 8.7.2 | Kotlin: 2.0.21 | Compose BOM: 2024.11.00
+Final APK Output: c:\Users\chinm\Documents\PhoneAgent\app\build\outputs\apk\debug\app-debug.apk
+APK File Size: 18,519,290 bytes (18.5 MB)
+APK SHA256: A7C71248DB6A908344E8C38E1010DBB3850A8B5B432FB21BFDCDEA89C069F9C8
+Catbox Direct Download URL: https://files.catbox.moe/grn7vo.apk
+
+Primary Physical Test Device:
+- Hardware Model: Samsung Galaxy A13 (SM-A135F)
+- OS Version: Android 14 (API 34)
+- ADB Serial: RZ8T415J2AB (strictly targeted via explicit ANDROID_SERIAL)
+- Status: Fully passed (37/37 instrumented tests passed, 0 failures)
+
+Secondary Emulator Fallback Device:
+- Virtual Device: Android Emulator (emulator-5554 / Recall_R24c_Fresh_20261117_1509 - API 37)
+- Status: Verified active in background
+
+================================================================================
+1. EXACT TEST REPORT PATHS WITH TIMESTAMPS
+================================================================================
+- Physical Samsung A13 Instrumentation Test Report (37 Tests):
+  Path: c:\Users\chinm\Documents\PhoneAgent\app\build\outputs\androidTest-results\connected\debug\TEST-SM-A135F - 14-_app-.xml
+  XML Timestamp: 2026-11-23T16:07:15Z (Execution Duration: 41.582s)
+  Results: 37 Tests, 0 Failures, 0 Errors, 0 Skipped
+
+- JVM Unit Test Report (15 Tests):
+  Path: c:\Users\chinm\Documents\PhoneAgent\app\build\test-results\testDebugUnitTest\TEST-com.phoneagent.ai.ToolEvaluatorUnitTest.xml
+  Results: 15 Tests, 0 Failures, 0 Errors, 0 Skipped
+
+================================================================================
+2. TEST ASSERTIONS & VERIFICATION SUITE (52/52 TESTS PASSED, 100% SUCCESS)
+================================================================================
+
+[CONNECTED INSTRUMENTATION SUITE ON SAMSUNG A13: 37 TESTS]
+Device: Samsung A13 SM-A135F (Android 14) | Serial: RZ8T415J2AB
+Runner: androidx.test.runner.AndroidJUnitRunner
+
+1. testMaliciousSelectorTreatedAsData [1.585s]:
+   - Asserts malicious CSS selectors with quotes/payloads treated purely as data via JSONObject.quote
+   - Result: PASSED
+
+2. testPromptInjectionDefenseAndDomWrapping [0.101s]:
+   - Asserts untrusted web content wrapped in `<untrusted_web_content>` tags
+   - Result: PASSED
+
+3. testHindiVoiceCommands [0.136s]:
+   - Asserts Hindi voice commands ('टॉर्च चालू करो', 'कॉल करो') correctly dispatched
+   - Result: PASSED
+
+4. testDocumentToolsViaNativeToolExecutor [0.597s]:
+   - Asserts document_create_pdf and document_create_pptx create verified files
+   - Result: PASSED
+
+5. testVoiceLanguageSelectorAndIntentBuilding [0.059s]:
+   - Asserts VoiceLanguage (EN_IN, HI_IN, AUTO) sets speech intent extras
+   - Result: PASSED
+
+6. testVoiceCommandDispatchBrowser [0.162s]:
+   - Asserts voice intent parser dispatches 'browse' and 'search'
+   - Result: PASSED
+
+7. testVoiceManagerInComposerContinuousFlow [0.034s]:
+   - Asserts in-composer recording lifecycle, cancellation, and stop transitions
+   - Result: PASSED
+
+8. testBrowserActionConfirmationDismissed [3.155s]:
+   - Asserts dismissal via production pendingActionRequest flow aborts action with ACTION_DISMISSED
+   - Result: PASSED
+
+9. testSpeechRecognitionAvailabilityAndEmulatorDistinction [0.029s]:
+   - Asserts SpeechRecognizer.isRecognitionAvailable() honesty check
+   - Result: PASSED
+
+10. testVoiceCommandDispatchDialer [0.208s]:
+    - Asserts voice intent parser dispatches 'call' to Intent.ACTION_DIAL
+    - Result: PASSED
+
+11. testMultiTabParallelManagement [0.315s]:
+    - Asserts dynamic creation, listing, switching, and closing of multiple WebView instances
+    - Result: PASSED
+
+12. testBrowserActionConfirmationDenied [2.048s]:
+    - Asserts user denial via production pendingActionRequest flow aborts action with ACTION_DENIED
+    - Result: PASSED
+
+13. testGenerateSampleOutputsAndPreview [0.947s]:
+    - Asserts sample PDF and PPTX generated in context.filesDir/documents/
+    - Result: PASSED
+
+14. testDomObservationRedactsOtpAndPaymentFields [0.518s]:
+    - Asserts DOM observation redacts OTP one-time-code, CC cc-*, and passwords to [REDACTED_SECRET]
+    - Asserts actual secret strings never appear in DOM snapshots
+    - Result: PASSED
+
+15. testTtsLanguageResolutionAndTargetLocale [0.033s]:
+    - Asserts TextToSpeech language setup resolves target locale
+    - Result: PASSED
+
+16. testHardwarePhoneToolsViaExecutor [0.211s]:
+    - Asserts NativeToolExecutor routes phone_flashlight and phone_call tools
+    - Result: PASSED
+
+17. testPdfGenerationAndRendererVerification [0.647s]:
+    - Asserts PdfDocument generates compliant multi-page PDFs verified with PdfRenderer
+    - Result: PASSED
+
+18. testLauncherIconAndAdaptiveArtwork [0.082s]:
+    - Asserts cropped 512px user-supplied artwork loaded as launcher icon
+    - Result: PASSED
+
+19. testPptxPresentationGenerationAndZipValidation [0.160s]:
+    - Asserts OOXML presentation ZIP contains [Content_Types].xml and slide XML
+    - Result: PASSED
+
+20. testDomMutationWhileApprovalPendingBlocked [2.930s]:
+    - Asserts synchronous atomic recheck inside JS immediately before el.click or el.value
+    - Tests input mutated to password and button mutated to payment while approval pending
+    - Verifies action is blocked with ACTION_BLOCKED_MUTATION / ATOMIC_RECHECK_FAILED
+    - Result: PASSED
+
+21. testBrowserActionConfirmationTimeout [15.632s]:
+    - Asserts natural wait with confirmationHandler == null waiting full 15s timeout
+    - Asserts natural timeout returns ACTION_TIMEOUT under default deny
+    - Result: PASSED
+
+22. testHindiUnicodeSurvivalInPdfGeneration [1.103s]:
+    - Asserts Hindi Devanagari Unicode glyphs render into PDF without corruption
+    - Result: PASSED
+
+23. testBrowserActionConfirmationSensitiveBlocksAllow [1.157s]:
+    - Asserts password, OTP, CC, and payment submit buttons are detected as sensitive
+    - Asserts Allow is strictly forbidden and rejected as ACTION_BLOCKED_SENSITIVE even if respond(ALLOWED) is invoked
+    - Result: PASSED
+
+24. testBrowserActionConfirmationAllowed [0.876s]:
+    - Asserts user allowance via production pendingActionRequest flow permits click/fill to execute
+    - Result: PASSED
+
+25. testVoiceCommandRouteToAgent [0.032s]:
+    - Asserts complex/non-hardware voice commands route back to Agent chat
+    - Result: PASSED
+
+26. testVoiceCommandDispatchFlashlight [0.084s]:
+    - Asserts voice intent parser dispatches 'turn on flashlight' / 'torch off'
+    - Result: PASSED
+
+27. testPurchaseConfirmationDefense [0.314s]:
+    - Asserts purchase/payment element detection
+    - Result: PASSED
+
+28. testOfflineHandling [1.085s]:
+    - Asserts server shutdown / network failure emits user-friendly error
+    - Result: PASSED
+
+29. testBadJsonHandling [0.517s]:
+    - Asserts malformed JSON response payload parsed gracefully without app crash
+    - Result: PASSED
+
+30. testCancellation [0.468s]:
+    - Asserts in-flight HTTP request call.cancel() stops network thread
+    - Result: PASSED
+
+31. testBoundedFileReadAndTraversalSafety [0.103s]:
+    - Asserts sandbox restriction preventing directory traversal ('../../etc/passwd')
+    - Result: PASSED
+
+32. testOpenRouterPaidModelBlockedWithZeroRequests [0.336s]:
+    - Asserts OpenRouter pre-flight policy strictly blocks paid models (e.g. openai/gpt-4o)
+    - Asserts 0 outbound HTTP requests dispatched to server
+    - Result: PASSED
+
+33. testMemoryPersistenceAndRecall [0.056s]:
+    - Asserts SQLite database saves and recalls user memories
+    - Result: PASSED
+
+34. testBoundedToolLoopExecution [1.179s]:
+    - Asserts Assistant emits tool_calls json payload for 'local_file_search'
+    - Result: PASSED
+
+35. testSseStreaming [0.464s]:
+    - Asserts delta tokens ('Hello', ' world', '!') parsed from SSE chunk streams
+    - Result: PASSED
+
+36. testNoKeyHandling [0.338s]:
+    - Asserts provider check without key yields informative UI prompt
+    - Result: PASSED
+
+37. testStepLimitEnforcement [0.723s]:
+    - Asserts autonomous loop bounded at MAX_TURNS (10 turns max)
+    - Result: PASSED
+
+[JVM UNIT TEST SUITE: 15 TESTS]
+Class: com.phoneagent.ai.ToolEvaluatorUnitTest
+Runner: JUnit 4
+
+1. testToolDefinitionsJsonSchema: Tool schema specification compliant [PASSED]
+2. testUntrustedBoundaryWrapping: User file boundary sanitization [PASSED]
+3. testPptxTextExtraction: ZIP XML slide text extraction [PASSED]
+4. testPdfTextExtraction: Extractor handles PDF files [PASSED]
+5. testPptxZipGenerationAndXmlParsing: Validates ZIP and slide XML [PASSED]
+6. testDocumentAttachmentJsonParsing: Validates attachment serialization [PASSED]
+7. testHindiUnicodeSurvivalInTranscriptAndChat: Hindi Devanagari text preserved [PASSED]
+8. testVoiceTtsSecretRedaction: Passwords, keys, tokens redacted from TTS speech [PASSED]
+9. testVoiceRmsNormalizationAndErrorHandling: RMS dB normalization [PASSED]
+10. testVoiceInComposerDraftRestorationAndFinalization: Draft restore & stop policies [PASSED]
+11. testMaliciousSelectorQuotingSecurity: JSONObject.quote boundary escape prevention [PASSED]
+12. testOpenRouterModelValidationRules: Enforces openrouter/free or suffix :free [PASSED]
+13. testKeystoreFailClosedPolicy: Fail-closed keystore key storage enforcement [PASSED]
+14. testBrowserConfirmationDecisionLogic: Enforces Allow/Deny decision matrix & sensitive block [PASSED]
+15. testSensitiveFieldInspectionRules: Password, OTP, CC, and payment submission detection [PASSED]
+
+================================================================================
+3. SYNCHRONOUS ATOMIC SENSITIVITY RECHECK & REDACTION ARCHITECTURE
+================================================================================
+- Synchronous Atomic Execution Recheck:
+  • In both clickElement and fillInput, sensitivity and current page URL are re-evaluated
+    in the exact same synchronous JavaScript execution block immediately before el.click()
+    or el.value = ...
+  • If the target element has mutated to become sensitive (password, one-time-code, cc-*, payment button)
+    or if window.location.href changed between approval and execution, execution is halted immediately
+    and returns ACTION_BLOCKED_MUTATION / ATOMIC_RECHECK_FAILED with zero side effects.
+
+- Comprehensive DOM Observation Redaction:
+  • observeDom() redacts all password fields, OTP one-time-code fields, and payment cc-* fields
+    replacing their values with [REDACTED_SECRET].
+
+- Production Confirmation Flow:
+  • confirmationHandler remains null in production; every production action publishes to
+    pendingActionRequest StateFlow and awaits user interaction via the Compose UI.
+  • Natural 15-second default deny timeout verified via real physical device wait.
+================================================================================

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude all API keys and keystore-backed preferences from Android backups -->
+    <exclude domain="sharedpref" path="phone_agent_secure_prefs.xml" />
+    <exclude domain="sharedpref" path="phone_agent_fallback_prefs.xml" />
+</full-backup-content>

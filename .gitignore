@@ -1,0 +1,25 @@
+# Gradle / build outputs
+.gradle/
+build/
+**/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+
+# Local machine config (may contain SDK paths or signing config)
+local.properties
+
+# Signing - never commit keystores
+*.keystore
+*.jks
+*.pem
+*.key
+
+# Secrets - API keys belong in the app's Keystore-backed settings, never in the repo
+secrets.properties
+api-keys.*
